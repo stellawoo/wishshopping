@@ -120,7 +120,7 @@ function chunkString(s, len) {
     return output;
 }
 
-function sendFBMessage(sender, messageData, callback) {
+//function sendFBMessage(sender, messageData, callback) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: FB_PAGE_ACCESS_TOKEN},
@@ -168,7 +168,7 @@ function sendFBMessage(sender, messageData, callback) {
     });
 }
 
-function sendFBSenderAction(sender, action, callback) {
+//function sendFBSenderAction(sender, action, callback) {
     setTimeout(() => {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -191,7 +191,7 @@ function sendFBSenderAction(sender, action, callback) {
     }, 1000);
 }
 
-function doSubscribeRequest() {
+//function doSubscribeRequest() {
     request({
             method: 'POST',
             uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
