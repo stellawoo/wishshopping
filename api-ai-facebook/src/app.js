@@ -17,6 +17,54 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
 
+function sendFBMessage(sender, messageData, callback) {
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: FB_PAGE_ACCESS_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id: sender},
+            message: {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"generic",
+        "elements":[
+          {
+            "title":"Welcome to Peter\'s Hats",
+            "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
+            "subtitle":"We\'ve got the right hat for everyone.",
+            "buttons":[
+              {
+                "type":"web_url",
+                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
+                "title":"View Website"
+              },
+              {
+                "type":"postback",
+                "title":"Start Chatting",
+                "payload":"USER_DEFINED_PAYLOAD"
+              }              
+            ]
+          }
+        ]
+      }
+    }
+  }
+        }
+    }, (error, response, body) => {
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+
+        if (callback) {
+            callback();
+        }
+    });
+}
+
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -120,55 +168,9 @@ function chunkString(s, len) {
     return output;
 }
 
-//function sendFBMessage(sender, messageData, callback) {
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: FB_PAGE_ACCESS_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: {
-    "attachment":{
-      "type":"template",
-      "payload":{
-        "template_type":"generic",
-        "elements":[
-          {
-            "title":"Welcome to Peter\'s Hats",
-            "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
-            "subtitle":"We\'ve got the right hat for everyone.",
-            "buttons":[
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                "title":"View Website"
-              },
-              {
-                "type":"postback",
-                "title":"Start Chatting",
-                "payload":"USER_DEFINED_PAYLOAD"
-              }              
-            ]
-          }
-        ]
-      }
-    }
-  }
-        }
-    }, (error, response, body) => {
-        if (error) {
-            console.log('Error sending message: ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        }
 
-        if (callback) {
-            callback();
-        }
-    });
-}
 
-//function sendFBSenderAction(sender, action, callback) {
+function sendFBSenderAction(sender, action, callback) {
     setTimeout(() => {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -191,7 +193,7 @@ function chunkString(s, len) {
     }, 1000);
 }
 
-//function doSubscribeRequest() {
+function doSubscribeRequest() {
     request({
             method: 'POST',
             uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
