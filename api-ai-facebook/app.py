@@ -55,13 +55,6 @@ def makeYqlQuery(req):
 
 def makeWebhookResult(data):
     query = data.get('query')
-    return {
-        "speech": 'wwwwww',
-        "displayText": 'wwwwww',
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-    }    
     if query is None:
         return {}
 
