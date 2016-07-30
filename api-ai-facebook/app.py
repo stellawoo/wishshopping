@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# tweak to auto deploy on heroku
 
 import urllib
 import json
